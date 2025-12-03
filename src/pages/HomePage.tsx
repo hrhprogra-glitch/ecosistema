@@ -6,11 +6,12 @@ import {
   ChevronRight, 
   Award, 
   Users, 
-  Briefcase,
-  Play,
-  ArrowUpRight,
-  Target,
+  Briefcase, 
+  Play, 
+  ArrowUpRight, 
+  Target, 
   Zap,
+  ChevronDown // <--- Importamos la flecha aquí
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -158,73 +159,113 @@ const testimonials = [
 
 // --- SECTIONS ---
 
-const Hero = () => (
-  <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
-    {/* Fondo Parallax: Speed 0.7 */}
-    <Parallax speed={0.7} className="absolute inset-0 z-0 pointer-events-none">
-      <div className="relative w-full h-[140%] -top-[20%]"> 
-        {/* IMAGEN PARA CELULAR - Opacidad reducida al 50% */}
-        <img
-          src="/aspersor2.jpg"
-          alt="Water Sprinkler Texture Mobile"
-          className="block md:hidden w-full h-full object-cover opacity-2"
-        />
-        
-        {/* IMAGEN PARA ESCRITORIO - Opacidad reducida al 50% */}
-        <img
-          src="/aspersor.jpg"
-          alt="Water Sprinkler Texture Desktop"
-          className="hidden md:block w-full h-full object-cover opacity-2"
-        />
-        
-        {/* Overlay oscuro añadido para mejorar el contraste del texto */}
-        <div className="absolute inset-0 bg-slate-900/40"></div>
-        
-        {/* EFECTO DE FUSIÓN (Abajo hacia Arriba) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent"></div>
-        
-        {/* Overlay adicional muy suave en la parte superior */}
-        <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-white/60 to-transparent"></div>
-      </div>
-    </Parallax>
+const Hero = () => {
+  // Estado para el rotador de imágenes
+  const [currentImage, setCurrentImage] = useState(0);
+  
+  // Lista de imágenes para escritorio
+  const desktopImages = [
+    "/aspersor.jpg",
+    "/aspersor2.jpg",
+    "/aspersor3.jpg",
+    "/aspersor4.jpg"
+  ];
 
-    {/* Contenedor principal: añadido pb-20 para elevar el centro visual */}
-    <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 flex items-center h-full pb-20">
-      <div className="max-w-4xl space-y-8">
-        
-        <Reveal delay={200}>
-          <h1 className="text-5xl lg:text-7xl font-light text-black leading-[1.1] tracking-tight drop-shadow-lg">
-            Maestría en la <br />
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-400 to-sky-500">
-              Tecnología de Aspersión.
-            </span>
-          </h1>
-        </Reveal>
-        
-        <Reveal delay={300}>
-          {/* CAMBIO: Texto descriptivo cambiado de text-white a text-slate-200 */}
-          <p className="text-xl md:text-2xl max-w-2xl leading-relaxed font-medium text-blue drop-shadow-lg">
-            Garantizamos cobertura perfecta y uniformidad milimétrica para proyectos que exigen excelencia.
-          </p>
-        </Reveal>
-        
-        <Reveal delay={400}>
-          <div className="flex flex-col sm:flex-row gap-5 pt-6">
-            <Link to="/contacto" className="group inline-flex items-center justify-center px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-all duration-300 shadow-xl shadow-slate-200 hover:shadow-2xl hover:-translate-y-1">
-              Cotizar Sistema
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link to="/tienda" className="group inline-flex items-center justify-center px-8 py-4 bg-white/60 backdrop-blur-md border border-slate-200 text-slate-800 font-medium rounded-full hover:bg-white hover:border-sky-300 transition-all duration-300 shadow-sm">
-              <Play className="mr-2 w-4 h-4 fill-slate-800 group-hover:scale-110 transition-transform group-hover:fill-sky-600" />
-              Ver Catálogo
-            </Link>
+  // Efecto para rotar las imágenes cada 5 segundos
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % desktopImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white">
+      {/* Fondo Parallax: Speed 0.7 */}
+      <Parallax speed={0.7} className="absolute inset-0 z-0 pointer-events-none">
+        <div className="relative w-full h-[140%] -top-[20%]"> 
+          {/* IMAGEN PARA CELULAR - Opacidad 50% */}
+          <img
+            src="/aspersor2.jpg"
+            alt="Water Sprinkler Texture Mobile"
+            className="block md:hidden w-full h-full object-cover opacity-50"
+          />
+          
+          {/* IMAGEN PARA ESCRITORIO - ROTADOR CON FILTRO NEGRO */}
+          <div className="hidden md:block absolute inset-0 w-full h-full">
+            {desktopImages.map((src, index) => (
+              <img
+                key={src}
+                src={src}
+                alt={`Fondo escritorio ${index + 1}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+                  index === currentImage ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            ))}
           </div>
-        </Reveal>
+          
+          {/* Overlay NEGRO (Filtro oscuro en lugar de azulado) */}
+          <div className="absolute inset-0 bg-black/60"></div>
+          
+          {/* EFECTO DE FUSIÓN (Abajo hacia Arriba) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent"></div>
+          
+          {/* Overlay adicional muy suave en la parte superior */}
+          <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-white/60 to-transparent"></div>
+        </div>
+      </Parallax>
 
+      {/* Contenedor principal */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 flex items-center h-full pb-20">
+        <div className="max-w-4xl space-y-8">
+          
+          <Reveal delay={200}>
+            {/* Título más grande y grueso */}
+            <h1 className="text-6xl lg:text-8xl font-extrabold text-black leading-none tracking-tight drop-shadow-xl">
+              Maestría en la <br />
+              <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-400 to-sky-500">
+                Tecnología de Aspersión.
+              </span>
+            </h1>
+          </Reveal>
+          
+          <Reveal delay={300}>
+            {/* Descripción más grande y gruesa */}
+            <p className="text-2xl md:text-3xl max-w-3xl leading-snug font-bold text-blue drop-shadow-md">
+              Garantizamos cobertura perfecta y uniformidad milimétrica para proyectos que exigen excelencia.
+            </p>
+          </Reveal>
+          
+          <Reveal delay={400}>
+            <div className="flex flex-col sm:flex-row gap-5 pt-6">
+              <Link to="/contacto" className="group inline-flex items-center justify-center px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-all duration-300 shadow-xl shadow-slate-200 hover:shadow-2xl hover:-translate-y-1">
+                Cotizar Sistema
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link to="/tienda" className="group inline-flex items-center justify-center px-8 py-4 bg-white/60 backdrop-blur-md border border-slate-200 text-slate-800 font-medium rounded-full hover:bg-white hover:border-sky-300 transition-all duration-300 shadow-sm">
+                <Play className="mr-2 w-4 h-4 fill-slate-800 group-hover:scale-110 transition-transform group-hover:fill-sky-600" />
+                Ver Catálogo
+              </Link>
+            </div>
+          </Reveal>
+
+        </div>
       </div>
-    </div>
-  </section>
-);
+
+      {/* Indicador de Scroll - Flecha Gruesa */}
+      <button 
+        onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-white opacity-80 hover:opacity-100 transition-opacity animate-bounce p-2"
+        aria-label="Bajar a contenido"
+      >
+        {/* stroke-[4] hace la flecha mucho más gruesa. w-10 h-10 es un tamaño mediano. */}
+        <ChevronDown className="w-10 h-10 stroke-[4] drop-shadow-md" />
+      </button>
+
+    </section>
+  );
+};
 
 const Services = () => (
   <section className="py-28 bg-white relative z-10">

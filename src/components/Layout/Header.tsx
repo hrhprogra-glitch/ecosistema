@@ -57,7 +57,7 @@ const Header: React.FC = () => {
               <Link 
                 key={item.name} 
                 to={item.path} 
-                className={`relative text-sm font-bold ${textColorClass} ${hoverTextColorClass} transition-colors py-1 group/link`}
+                className={`relative text-lg font-bold ${textColorClass} ${hoverTextColorClass} transition-colors py-1 group/link`}
               >
                 {item.name}
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-sky-500 transition-all duration-300 ease-out group-hover/link:w-full"></span>
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
           <div className="hidden lg:flex items-center gap-6">
               <Link 
                 to="/contacto" 
-                className={`text-sm font-bold ${isTransparent ? 'text-white/70' : 'text-slate-500'} hover:text-slate-900 transition-colors`}
+                className={`text-lg font-bold ${isTransparent ? 'text-white/70' : 'text-slate-500'} hover:text-slate-900 transition-colors`}
               >
                   Contacto
               </Link>

@@ -13,10 +13,11 @@
   }
   
   body {
-    @apply text-slate-800 bg-white;
+    /* Aplicamos tus nuevos colores base */
+    @apply text-ecosistema-dark bg-ecosistema-primary;
   }
 
-  /* Micro-interacción para subrayados animados */
+  /* Utilidad para el subrayado animado */
   .hover-underline-animation {
     display: inline-block;
     position: relative;
@@ -41,7 +42,6 @@
   }
 }
 
-/* Ocultar scrollbar para carruseles limpios */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }

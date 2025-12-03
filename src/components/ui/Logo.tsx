@@ -1,16 +1,26 @@
 import { Droplet } from 'lucide-react';
 import React from 'react';
 
-const Logo: React.FC = () => {
+// 1. Definimos que el componente acepta una propiedad "color" opcional
+interface LogoProps {
+  color?: 'white' | 'dark';
+}
+
+// 2. Le pasamos la propiedad al componente con un valor por defecto ('dark')
+const Logo: React.FC<LogoProps> = ({ color = 'dark' }) => {
+  
+  // 3. Determinamos la clase de color basada en la propiedad recibida
+  // Si es 'white', usamos texto blanco. Si no, usamos el color oscuro de tu tema.
+  const textColorClass = color === 'white' ? 'text-white' : 'text-ecosistema-dark';
+
   return (
-    <div className="flex items-center space-x-2">
-      {/* Logo: Gota de agua blanca sobre fondo celeste sólido */}
-      {/* Se usa bg-ecosistema-accent para el fondo sólido y shadow-celeste para un efecto 3D pulido. */}
-      <div className="p-1 bg-ecosistema-accent rounded-full shadow-celeste transition duration-300 hover:scale-105">
-        {/* La gota es blanca (ecosistema-primary) */}
-        <Droplet className="w-6 h-6 text-ecosistema-primary fill-ecosistema-primary" />
+    <div className="flex items-center space-x-3">
+      <div className="p-2 bg-ecosistema-accent rounded-full shadow-celeste transition duration-300 hover:scale-105">
+        <Droplet className="w-8 h-8 text-ecosistema-primary fill-ecosistema-primary" />
       </div>
-      <span className="text-xl font-bold text-ecosistema-dark tracking-wider">
+      
+      {/* 4. Aplicamos la clase de color dinámica aquí */}
+      <span className={`text-2xl font-bold tracking-wider ${textColorClass}`}>
         ECOSISTEMA
       </span>
     </div>

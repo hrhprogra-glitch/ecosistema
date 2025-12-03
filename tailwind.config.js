@@ -7,12 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        'ecosistema-primary': '#FFFFFF', // Blanco
-        'ecosistema-accent': '#38bdf8', // Celeste/Cyan
-        'ecosistema-dark': '#1f2937', // Texto oscuro para contraste
+        'ecosistema-primary': '#FFFFFF',  // Blanco
+        'ecosistema-dark': '#020035',     // Azul Noche (Tu color oscuro)
+        'ecosistema-secondary': '#006485', // Teal Oscuro (Tu color intermedio)
+        'ecosistema-accent': '#40cfff',   // Cyan Brillante (Tu color de acento)
       },
       boxShadow: {
-        'celeste': '0 10px 30px -5px rgba(56, 189, 248, 0.3)',
+        // Actualizamos la sombra para que coincida con el nuevo Cyan (#40cfff)
+        'celeste': '0 10px 30px -5px rgba(64, 207, 255, 0.4)',
       }
     },
   },
