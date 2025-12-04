@@ -13,7 +13,7 @@
   }
   
   body {
-    /* Aplicamos tus nuevos colores base */
+    /* Aplicamos tus colores base */
     @apply text-ecosistema-dark bg-ecosistema-primary;
   }
 
@@ -48,4 +48,203 @@
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+/* --- TARJETA 3D INTERACTIVA (VERSIÓN CLARA) --- */
+
+.card-container {
+  position: relative;
+  width: 100%;
+  height: 320px; /* Altura fija para uniformidad */
+  transition: 200ms;
+  perspective: 800px;
+}
+
+.card-container:active {
+  transform: scale(0.98);
+}
+
+.card-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  transition: 700ms;
+  
+  /* CAMBIO: Fondo Claro (Blanco a un tono muy sutil de azul cielo) */
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  
+  /* CAMBIO: Borde gris muy suave en lugar de transparente */
+  border: 1px solid #cbd5e1;
+  
+  overflow: hidden;
+  
+  /* CAMBIO: Sombra más suave y difusa para fondo claro */
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto de brillo o blur detrás (Opcional, estilo 'glow') */
+.card-3d::before {
+  content: '';
+  /* Gradiente con tus colores corporativos (Cyan y Azul) */
+  background: linear-gradient(43deg, #40cfff 0%, #006485 46%, #020035 100%);
+  filter: blur(2rem);
+  opacity: 0; /* Oculto por defecto, aparece en hover */
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  transition: 200ms;
+}
+
+/* --- Estados de Contenido --- */
+
+/* 1. Estado Normal: Logo y Título Visibles */
+.card-content-default {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+  opacity: 1;
+  transform: translateY(0);
+  z-index: 10;
+  text-align: center;
+  padding: 20px;
+  pointer-events: none; /* Permite que el mouse interactúe con los trackers */
+}
+
+/* 2. Estado Hover: Información (Descripción) */
+.card-content-hover {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+  position: absolute;
+  z-index: 10;
+  padding: 24px;
+  text-align: center;
+  
+  /* CAMBIO: Texto Oscuro (Azul Noche) para que se lea sobre blanco */
+  color: #020035; 
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-weight: 500; /* Un poco más de peso para legibilidad */
+  pointer-events: none;
+}
+
+/* --- Lógica de Hover (Trackers) --- */
+
+/* Cuando pasas el mouse sobre cualquier tracker... */
+
+/* ...el contenido normal desaparece y sube */
+.tracker:hover ~ .card-3d .card-content-default {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* ...el contenido hover aparece */
+.tracker:hover ~ .card-3d .card-content-hover {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ...la tarjeta brilla */
+.tracker:hover ~ .card-3d {
+  transition: 300ms;
+  /* CAMBIO: Borde Cyan más visible al hover */
+  border-color: #40cfff; 
+  /* CAMBIO: Sombra Cyan suave */
+  box-shadow: 0 0 25px rgba(64, 207, 255, 0.2);
+}
+
+.tracker:hover ~ .card-3d::before {
+  opacity: 0.15; /* Brillo muy sutil para no oscurecer el fondo blanco */
+}
+
+/* --- Grilla de Trackers para el efecto 3D --- */
+.canvas {
+  perspective: 800px;
+  inset: 0;
+  z-index: 200;
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 0px 0px;
+}
+
+.tracker {
+  position: absolute;
+  z-index: 200;
+  width: 100%;
+  height: 100%;
+  cursor: pointer; /* Cursor de mano */
+}
+
+/* Asignación de áreas de la grilla 5x5 */
+.tr-1 { grid-area: 1 / 1 / 2 / 2; }
+.tr-2 { grid-area: 1 / 2 / 2 / 3; }
+.tr-3 { grid-area: 1 / 3 / 2 / 4; }
+.tr-4 { grid-area: 1 / 4 / 2 / 5; }
+.tr-5 { grid-area: 1 / 5 / 2 / 6; }
+.tr-6 { grid-area: 2 / 1 / 3 / 2; }
+.tr-7 { grid-area: 2 / 2 / 3 / 3; }
+.tr-8 { grid-area: 2 / 3 / 3 / 4; }
+.tr-9 { grid-area: 2 / 4 / 3 / 5; }
+.tr-10 { grid-area: 2 / 5 / 3 / 6; }
+.tr-11 { grid-area: 3 / 1 / 4 / 2; }
+.tr-12 { grid-area: 3 / 2 / 4 / 3; }
+.tr-13 { grid-area: 3 / 3 / 4 / 4; }
+.tr-14 { grid-area: 3 / 4 / 4 / 5; }
+.tr-15 { grid-area: 3 / 5 / 4 / 6; }
+.tr-16 { grid-area: 4 / 1 / 5 / 2; }
+.tr-17 { grid-area: 4 / 2 / 5 / 3; }
+.tr-18 { grid-area: 4 / 3 / 5 / 4; }
+.tr-19 { grid-area: 4 / 4 / 5 / 5; }
+.tr-20 { grid-area: 4 / 5 / 5 / 6; }
+.tr-21 { grid-area: 5 / 1 / 6 / 2; }
+.tr-22 { grid-area: 5 / 2 / 6 / 3; }
+.tr-23 { grid-area: 5 / 3 / 6 / 4; }
+.tr-24 { grid-area: 5 / 4 / 6 / 5; }
+.tr-25 { grid-area: 5 / 5 / 6 / 6; }
+
+/* Rotaciones 3D Específicas por celda */
+.tr-1:hover ~ .card-3d { transform: rotateX(20deg) rotateY(-10deg); }
+.tr-2:hover ~ .card-3d { transform: rotateX(20deg) rotateY(-5deg); }
+.tr-3:hover ~ .card-3d { transform: rotateX(20deg) rotateY(0deg); }
+.tr-4:hover ~ .card-3d { transform: rotateX(20deg) rotateY(5deg); }
+.tr-5:hover ~ .card-3d { transform: rotateX(20deg) rotateY(10deg); }
+
+.tr-6:hover ~ .card-3d { transform: rotateX(10deg) rotateY(-10deg); }
+.tr-7:hover ~ .card-3d { transform: rotateX(10deg) rotateY(-5deg); }
+.tr-8:hover ~ .card-3d { transform: rotateX(10deg) rotateY(0deg); }
+.tr-9:hover ~ .card-3d { transform: rotateX(10deg) rotateY(5deg); }
+.tr-10:hover ~ .card-3d { transform: rotateX(10deg) rotateY(10deg); }
+
+.tr-11:hover ~ .card-3d { transform: rotateX(0deg) rotateY(-10deg); }
+.tr-12:hover ~ .card-3d { transform: rotateX(0deg) rotateY(-5deg); }
+.tr-13:hover ~ .card-3d { transform: rotateX(0deg) rotateY(0deg); }
+.tr-14:hover ~ .card-3d { transform: rotateX(0deg) rotateY(5deg); }
+.tr-15:hover ~ .card-3d { transform: rotateX(0deg) rotateY(10deg); }
+
+.tr-16:hover ~ .card-3d { transform: rotateX(-10deg) rotateY(-10deg); }
+.tr-17:hover ~ .card-3d { transform: rotateX(-10deg) rotateY(-5deg); }
+.tr-18:hover ~ .card-3d { transform: rotateX(-10deg) rotateY(0deg); }
+.tr-19:hover ~ .card-3d { transform: rotateX(-10deg) rotateY(5deg); }
+.tr-20:hover ~ .card-3d { transform: rotateX(-10deg) rotateY(10deg); }
+
+.tr-21:hover ~ .card-3d { transform: rotateX(-20deg) rotateY(-10deg); }
+.tr-22:hover ~ .card-3d { transform: rotateX(-20deg) rotateY(-5deg); }
+.tr-23:hover ~ .card-3d { transform: rotateX(-20deg) rotateY(0deg); }
+.tr-24:hover ~ .card-3d { transform: rotateX(-20deg) rotateY(5deg); }
+.tr-25:hover ~ .card-3d { transform: rotateX(-20deg) rotateY(10deg); }
+
+.noselect {
+  user-select: none;
+  -webkit-user-select: none;
 }
