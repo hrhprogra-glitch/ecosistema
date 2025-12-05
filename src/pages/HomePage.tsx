@@ -623,22 +623,40 @@ const Portfolio = () => {
     </section>
   );
 };
-// --- NUEVO COMPONENTE: SECCIÓN DE MARCAS ---
+
+// --- SECCIÓN DE MARCAS (PATROCINADORES - FLIP CARDS) ---
 
 const Brands = () => {
-  // Aquí puedes poner los nombres reales o rutas de logos de tus marcas
   const brands = [
-    { name: "Rain Bird", opacity: "opacity-70" },
-    { name: "Hunter", opacity: "opacity-60" },
-    { name: "Toro", opacity: "opacity-80" },
-    { name: "Netafim", opacity: "opacity-70" },
-    { name: "Rivulis", opacity: "opacity-60" },
-    { name: "Jain", opacity: "opacity-80" },
+    { 
+      name: "Hunter", 
+      logo: "/hunter.png", 
+      desc: "Líder mundial en innovación de riego residencial y comercial. Eficiencia y precisión en cada gota." 
+    },
+    { 
+      name: "DIG", 
+      logo: "/dig.png", 
+      desc: "Pioneros en soluciones de micro-riego sostenibles alimentadas por energía alternativa." 
+    },
+    { 
+      name: "Rain Pro", 
+      logo: "/rainpro.png", 
+      desc: "Componentes de aspersión de grado profesional diseñados para el máximo rendimiento." 
+    },
+    { 
+      name: "Wassermann", 
+      logo: "/wassermann.png", 
+      desc: "Ingeniería alemana en sistemas de bombeo y presurización hídrica de alta confiabilidad." 
+    },
+    { 
+      name: "Tuboplast", 
+      logo: "/tuboplast.png", 
+      desc: "Infraestructura de conducción hidráulica robusta y certificada para la agroindustria." 
+    },
   ];
 
   return (
     <section className="py-24 bg-slate-900 relative overflow-hidden">
-      {/* Fondo Decorativo Sutil */}
       <div className="absolute inset-0 opacity-10 pointer-events-none" 
            style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '32px 32px' }}>
       </div>
@@ -646,47 +664,54 @@ const Brands = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         <Reveal>
           <div className="text-center mb-16 max-w-3xl mx-auto">
-            <h4 className="text-xs font-bold tracking-[0.2em] text-sky-500 mb-3 uppercase">Aliados Estratégicos</h4>
             <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
-              Tecnología respaldada por los <span className="font-semibold text-sky-400">Líderes Globales.</span>
+              Patrocinadores
             </h2>
-            <p className="text-slate-400 font-light text-lg">
-              Integramos componentes certificados de las marcas más prestigiosas de la industria para garantizar durabilidad y eficiencia.
-            </p>
+            <p className="text-slate-400">Pasa el cursor sobre las tarjetas para conocer más.</p>
           </div>
         </Reveal>
 
-        {/* Grid de Marcas */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+        <div className="flex flex-wrap justify-center gap-8">
           {brands.map((brand, idx) => (
             <Reveal key={idx} delay={idx * 100}>
-              <div className="group relative h-24 bg-slate-800/30 border border-slate-700/50 rounded-xl flex items-center justify-center hover:bg-slate-800 hover:border-sky-500/30 hover:shadow-[0_0_20px_rgba(14,165,233,0.15)] transition-all duration-300 cursor-default">
-                
-                {/* Texto Placeholder (Reemplazar con <img src="..." /> si tienes logos) */}
-                <span className={`text-xl md:text-2xl font-bold text-slate-500 group-hover:text-white transition-colors duration-300 ${brand.opacity}`}>
-                  {brand.name}
-                </span>
+              <div className="flip-card">
+                <div className="flip-card-inner">
+                  
+                  {/* FRENTE: IMAGEN FULL */}
+                  <div className="flip-card-front">
+                    <div className="h-full w-full bg-white flex items-center justify-center"> 
+                      <img 
+                        src={brand.logo} 
+                        alt={brand.name}
+                        className="w-full h-full object-contain p-4" 
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'; // Si falla la imagen, se oculta
+                        }}
+                      />
+                    </div>
+                  </div>
 
-                {/* Efecto de brillo al hover */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/0 via-sky-500/0 to-sky-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
+                  {/* DORSO: DESCRIPCIÓN */}
+                  <div className="flip-card-back">
+                    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+                      <h4 className="text-sky-400 font-bold text-xl mb-3">{brand.name}</h4>
+                      <p className="text-slate-200 text-sm font-light leading-relaxed">
+                        {brand.desc}
+                      </p>
+                      <div className="mt-4 w-12 h-1 bg-sky-500 rounded-full"></div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </Reveal>
           ))}
         </div>
-
-        {/* CTA Inferior */}
-        <Reveal delay={400}>
-           <div className="mt-16 text-center border-t border-slate-800 pt-10">
-              <p className="text-slate-500 text-sm">
-                ¿Busca una refacción específica? <Link to="/contacto" className="text-sky-400 hover:text-sky-300 font-medium transition-colors border-b border-sky-400/30 hover:border-sky-400 pb-0.5">Consulte nuestro catálogo de partes</Link>
-              </p>
-           </div>
-        </Reveal>
       </div>
     </section>
   );
 };
-
+// ... (resto del archivo sin cambios)
 const CTA = () => (
   <section className="py-32 bg-sky-50 overflow-hidden relative">
     <Parallax speed={-0.6} className="absolute top-0 right-0 pointer-events-none"><div className="w-96 h-96 bg-sky-100 rounded-full blur-3xl opacity-50 -mr-20 -mt-20"></div></Parallax>
