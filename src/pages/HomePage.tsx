@@ -712,6 +712,7 @@ const Brands = () => {
   );
 };
 // ... (resto del archivo sin cambios)
+
 const CTA = () => (
   <section className="py-32 bg-sky-50 overflow-hidden relative">
     <Parallax speed={-0.6} className="absolute top-0 right-0 pointer-events-none"><div className="w-96 h-96 bg-sky-100 rounded-full blur-3xl opacity-50 -mr-20 -mt-20"></div></Parallax>
