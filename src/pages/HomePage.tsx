@@ -143,9 +143,36 @@ const irrigationSystems = [
 ];
 
 const projects = [
-  { category: "Campos Deportivos", title: "Estadio Nacional Arena", location: "Argentina", image: "https://images.unsplash.com/photo-1577223625816-7546f13df25d?q=80&w=2000&auto=format&fit=crop" },
-  { category: "Agricultura", title: "Viñedos Altos del Sur", location: "Chile", image: "/aspersor4.jpg" },
-  { category: "Residencial", title: "Reserva Ecológica Privada", location: "España", image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?q=80&w=2000&auto=format&fit=crop" }
+  { 
+    category: "Campos Deportivos", 
+    title: "Estadio Nacional Arena", 
+    location: "Argentina", 
+    image: "https://images.unsplash.com/photo-1577223625816-7546f13df25d?q=80&w=2000&auto=format&fit=crop" 
+  },
+  { 
+    category: "Agricultura", 
+    title: "Viñedos Altos del Sur", 
+    location: "Chile", 
+    image: "/aspersor4.jpg" 
+  },
+  { 
+    category: "Residencial", 
+    title: "Reserva Ecológica Privada", 
+    location: "España", 
+    image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?q=80&w=2000&auto=format&fit=crop" 
+  },
+  { 
+    category: "Corporativo", 
+    title: "Parque Tecnológico Central", 
+    location: "México", 
+    image: "https://images.unsplash.com/photo-1496417263034-38ec4f0d665a?q=80&w=2000&auto=format&fit=crop" 
+  },
+  { 
+    category: "Hotelería", 
+    title: "Resort & Spa Oasis", 
+    location: "Caribe", 
+    image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=2000&auto=format&fit=crop" 
+  }
 ];
 
 const testimonials = [
@@ -486,66 +513,179 @@ const About = () => (
   </section>
 );
 
-const Portfolio = () => (
-  <section className="py-32 bg-white">
-    <div className="max-w-7xl mx-auto px-6 lg:px-12">
-      <Reveal>
-        <div className="mb-16 text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl font-light text-slate-900 mb-4">Proyectos de <span className="font-semibold">Irrigación</span></h2>
-          <p className="text-slate-500">Instalaciones de alto calibre en terrenos desafiantes.</p>
-        </div>
-      </Reveal>
-      <div className="grid md:grid-cols-3 gap-1">
-        {projects.map((proj, idx) => (
-          <Reveal key={idx} delay={idx * 150} className="w-full h-full">
-            <div className="group relative aspect-[3/4] overflow-hidden bg-gray-100 cursor-pointer w-full">
-              <img src={proj.image} alt={proj.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:grayscale-0" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
-                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-sky-400 text-xs font-bold tracking-widest uppercase mb-2 block">{proj.category}</span>
-                  <h3 className="text-white text-2xl font-medium mb-1">{proj.title}</h3>
-                  <p className="text-gray-300 text-sm flex items-center gap-1"><Globe className="w-3 h-3" /> {proj.location}</p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+const Portfolio = () => {
+  const [activeIndex, setActiveIndex] = useState(1);
 
-const Testimonials = () => (
-  <section className="py-32 bg-slate-900 text-white relative overflow-hidden">
-    <Parallax speed={0.3} className="absolute top-0 right-0 w-1/2 h-full pointer-events-none"><div className="w-full h-full bg-slate-800/30 -skew-x-12 transform translate-x-1/4"></div></Parallax>
-    <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-      <div className="grid lg:grid-cols-2 gap-16">
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <section className="py-32 bg-slate-50 overflow-hidden relative">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        
+        {/* Encabezado (Sin botones aquí) */}
         <Reveal>
-          <div>
-            <h2 className="text-4xl font-light mb-8">Opiniones del <span className="font-semibold text-sky-400">Sector.</span></h2>
-            <div className="flex gap-4">
-              <button className="p-4 rounded-full border border-slate-700 hover:bg-slate-800 hover:border-slate-600 transition-all active:scale-95"><ArrowRight className="w-5 h-5 rotate-180" /></button>
-              <button className="p-4 rounded-full bg-sky-500 hover:bg-sky-600 transition-all shadow-lg shadow-sky-900/20 active:scale-95"><ArrowRight className="w-5 h-5" /></button>
-            </div>
+          <div className="mb-10 relative z-10 text-center md:text-left">
+            <h4 className="text-xs font-bold tracking-[0.2em] text-sky-600 mb-2 uppercase">Portafolio Global</h4>
+            <h2 className="text-4xl font-light text-slate-900 mb-4">
+              Proyectos <span className="font-semibold text-sky-500">Destacados</span>
+            </h2>
+            <p className="text-slate-500 text-lg font-light max-w-2xl">
+              Infraestructura hídrica desplegada en los entornos más exigentes.
+            </p>
           </div>
         </Reveal>
-        <div className="space-y-12">
-          {testimonials.map((test, idx) => (
-            <Reveal key={idx} delay={idx * 200}>
-              <div className="border-l-2 border-slate-700 pl-8 hover:border-sky-500 transition-colors duration-500 group">
-                <div className="flex gap-1 mb-4 opacity-50 group-hover:opacity-100 transition-opacity">
-                  {[1,2,3,4,5].map(star => <div key={star} className="w-2 h-2 rounded-full bg-sky-500"></div>)}
+
+        {/* --- CONTENEDOR DEL CARRUSEL --- */}
+        <div className="relative h-[500px] w-full flex items-center justify-center perspective-1000 group/carousel">
+          
+          {/* BOTÓN ANTERIOR (Izquierda) */}
+          <button 
+            onClick={handlePrev}
+            className="absolute left-0 z-[200] p-4 rounded-full bg-white/80 backdrop-blur-md text-slate-800 hover:bg-sky-500 hover:text-white transition-all shadow-lg hover:shadow-sky-500/50 hover:scale-110 active:scale-95 -ml-4 md:ml-0"
+            aria-label="Anterior"
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+
+          {/* BOTÓN SIGUIENTE (Derecha) */}
+          <button 
+            onClick={handleNext}
+            className="absolute right-0 z-[200] p-4 rounded-full bg-white/80 backdrop-blur-md text-slate-800 hover:bg-sky-500 hover:text-white transition-all shadow-lg hover:shadow-sky-500/50 hover:scale-110 active:scale-95 -mr-4 md:mr-0"
+            aria-label="Siguiente"
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+
+          {/* TARJETAS */}
+          {projects.map((proj, index) => {
+            let position = index - activeIndex;
+            if (projects.length > 2) {
+               if (position < -Math.floor(projects.length / 2)) position += projects.length;
+               if (position > Math.floor(projects.length / 2)) position -= projects.length;
+            }
+
+            const isActive = position === 0;
+            const translateZ = isActive ? 0 : -400 * Math.abs(position); 
+            const rotateY = isActive ? 0 : -45 * Math.sign(position);
+            const translateX = position * 60; 
+            const opacity = isActive ? 1 : Math.max(0.2, 1 - Math.abs(position) * 0.4); 
+            const zIndex = 100 - Math.abs(position);
+            const scale = isActive ? 1 : 0.8;
+
+            return (
+              <div
+                key={index}
+                className="absolute w-[85%] md:w-[60%] lg:w-[40%] aspect-[4/3] transition-all duration-700 ease-out cursor-pointer"
+                style={{
+                  transform: `translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+                  zIndex: zIndex,
+                  opacity: Math.abs(position) > 2 ? 0 : opacity, 
+                }}
+                onClick={() => setActiveIndex(index)}
+              >
+                <div className={`relative h-full w-full rounded-3xl overflow-hidden shadow-2xl border transition-all duration-500 ${isActive ? 'border-sky-400/50 shadow-sky-500/20' : 'border-transparent'}`}>
+                  <img 
+                    src={proj.image} 
+                    alt={proj.title} 
+                    className="w-full h-full object-cover pointer-events-none" 
+                  />
+                  <div className={`absolute inset-0 bg-slate-900 transition-opacity duration-500 ${isActive ? 'opacity-20' : 'opacity-60 hover:opacity-40'}`}></div>
+                  <div className={`absolute bottom-0 left-0 right-0 p-8 transform transition-all duration-500 ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-80'}`}>
+                    <span className="inline-block px-3 py-1 mb-3 text-[10px] font-bold tracking-widest text-white uppercase bg-sky-500 rounded-full shadow-lg shadow-sky-500/30">
+                      {proj.category}
+                    </span>
+                    <h3 className="text-3xl font-bold text-white mb-2 shadow-black drop-shadow-md leading-tight">
+                      {proj.title}
+                    </h3>
+                    <div className="flex items-center gap-2 text-slate-300 font-medium">
+                      <Globe className="w-4 h-4 text-sky-400" />
+                      {proj.location}
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xl md:text-2xl font-light leading-relaxed text-gray-200 mb-6 italic">"{test.quote}"</p>
-                <div><p className="font-semibold text-white group-hover:text-sky-400 transition-colors">{test.author}</p><p className="text-sm text-slate-400">{test.role}</p></div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <style>{`
+        .perspective-1000 {
+          perspective: 1000px;
+          transform-style: preserve-3d;
+        }
+      `}</style>
+    </section>
+  );
+};
+// --- NUEVO COMPONENTE: SECCIÓN DE MARCAS ---
+
+const Brands = () => {
+  // Aquí puedes poner los nombres reales o rutas de logos de tus marcas
+  const brands = [
+    { name: "Rain Bird", opacity: "opacity-70" },
+    { name: "Hunter", opacity: "opacity-60" },
+    { name: "Toro", opacity: "opacity-80" },
+    { name: "Netafim", opacity: "opacity-70" },
+    { name: "Rivulis", opacity: "opacity-60" },
+    { name: "Jain", opacity: "opacity-80" },
+  ];
+
+  return (
+    <section className="py-24 bg-slate-900 relative overflow-hidden">
+      {/* Fondo Decorativo Sutil */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '32px 32px' }}>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+        <Reveal>
+          <div className="text-center mb-16 max-w-3xl mx-auto">
+            <h4 className="text-xs font-bold tracking-[0.2em] text-sky-500 mb-3 uppercase">Aliados Estratégicos</h4>
+            <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
+              Tecnología respaldada por los <span className="font-semibold text-sky-400">Líderes Globales.</span>
+            </h2>
+            <p className="text-slate-400 font-light text-lg">
+              Integramos componentes certificados de las marcas más prestigiosas de la industria para garantizar durabilidad y eficiencia.
+            </p>
+          </div>
+        </Reveal>
+
+        {/* Grid de Marcas */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+          {brands.map((brand, idx) => (
+            <Reveal key={idx} delay={idx * 100}>
+              <div className="group relative h-24 bg-slate-800/30 border border-slate-700/50 rounded-xl flex items-center justify-center hover:bg-slate-800 hover:border-sky-500/30 hover:shadow-[0_0_20px_rgba(14,165,233,0.15)] transition-all duration-300 cursor-default">
+                
+                {/* Texto Placeholder (Reemplazar con <img src="..." /> si tienes logos) */}
+                <span className={`text-xl md:text-2xl font-bold text-slate-500 group-hover:text-white transition-colors duration-300 ${brand.opacity}`}>
+                  {brand.name}
+                </span>
+
+                {/* Efecto de brillo al hover */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/0 via-sky-500/0 to-sky-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
               </div>
             </Reveal>
           ))}
         </div>
+
+        {/* CTA Inferior */}
+        <Reveal delay={400}>
+           <div className="mt-16 text-center border-t border-slate-800 pt-10">
+              <p className="text-slate-500 text-sm">
+                ¿Busca una refacción específica? <Link to="/contacto" className="text-sky-400 hover:text-sky-300 font-medium transition-colors border-b border-sky-400/30 hover:border-sky-400 pb-0.5">Consulte nuestro catálogo de partes</Link>
+              </p>
+           </div>
+        </Reveal>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const CTA = () => (
   <section className="py-32 bg-sky-50 overflow-hidden relative">
@@ -571,7 +711,7 @@ const PremiumHomePage: React.FC = () => {
         <IdentitySection />
         <About />
         <Portfolio />
-        <Testimonials />
+        <Brands />
         <CTA />
       </main>
     </div>
