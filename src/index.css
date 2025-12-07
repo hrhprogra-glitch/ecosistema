@@ -360,17 +360,24 @@
 }
 
 /* =========================================
-   ESTILOS DE PATROCINADORES (FLIP CARDS)
-   Tema: Ecosistema Dark (Azul/Cyan)
+   ESTILOS DE PATROCINADORES (FLIP CARDS) - FINAL V2
    ========================================= */
 
 .flip-card {
   background-color: transparent;
-  width: 260px;
-  height: 260px;
-  perspective: 1000px; /* Necesario para el efecto 3D */
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  perspective: 1000px;
   cursor: pointer;
+  /* NUEVO: Transición suave para el movimiento hacia arriba */
+  transition: transform 0.4s ease-out;
 }
+
+/* NUEVO: Movimiento hacia arriba al hacer hover en la tarjeta completa */
+.flip-card:hover {
+    transform: translateY(-12px);
+}
+
 
 /* Contenedor interno que realiza el giro */
 .flip-card-inner {
@@ -378,78 +385,23 @@
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote suave */
-  transform-style: preserve-3d;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border-radius: 1.5rem;
-}
-
-/* Acción de giro al hacer hover */
-.flip-card:hover .flip-card-inner {
-  transform: rotateY(180deg);
-}
-
-/* Estilos comunes para Frente y Dorso */
-.flip-card-front, .flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  border: 1px solid #334155; /* Borde sutil Slate-700 */
-}
-
-/* --- FRENTE (Logo) --- */
-.flip-card-front {
-  background: #1e293b; /* Slate-800 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Efecto sutil en el frente al hacer hover sobre el contenedor */
-.flip-card:hover .flip-card-front {
-  border-color: #40cfff; /* Borde Cyan al activarse */
-}
-
-/* --- DORSO (Descripción) --- */
-.flip-card-back {
-  background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%); /* Gradiente oscuro */
-  color: white;
-  transform: rotateY(180deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-color: #40cfff; /* Borde Cyan constante en el reverso */
-  box-shadow: 0 0 20px rgba(64, 207, 255, 0.1); /* Resplandor interno */
-}
-/* =========================================
-   ESTILOS FLIP CARDS (PATROCINADORES)
-   ========================================= */
-
-.flip-card {
-  background-color: transparent;
-  width: 260px;
-  height: 260px;
-  perspective: 1000px;
-  cursor: pointer;
-}
-
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Se ajustaron las transiciones para incluir el borde y la sombra */
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
   transform-style: preserve-3d;
   border-radius: 1.5rem;
-  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+  /* Sombra base sutil */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* Borde base transparente para que la transición del brillo sea suave */
+  border: 2px solid transparent;
 }
 
+/* EFECTO AL HACER HOVER: Giro + Brillo Intenso */
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
+  /* NUEVO: Sombra tipo "Glow" celeste intenso */
+  box-shadow: 0 0 25px 5px rgba(14, 165, 233, 0.6); /* sky-500 con transparencia */
+  /* NUEVO: Borde brillante */
+  border-color: rgba(14, 165, 233, 0.8);
 }
 
 .flip-card-front, .flip-card-back {
@@ -458,18 +410,28 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: 1.5rem;
+  border-radius: 1.3rem; /* Ligeramente menor que el padre para que el borde brillante se vea bien */
   overflow: hidden;
-  border: 1px solid #334155;
 }
 
+/* --- FRENTE (Logo) --- */
 .flip-card-front {
-  background: white; /* Fondo blanco para resaltar logos */
+  /* Fondo blanco muy limpio */
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* --- DORSO (Descripción) --- */
 .flip-card-back {
-  background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+  /* Gradiente oscuro premium */
+  background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
   color: white;
   transform: rotateY(180deg);
-  border-color: #40cfff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Borde interno sutil para el reverso */
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.3); 
 }

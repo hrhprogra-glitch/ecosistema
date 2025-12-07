@@ -22,13 +22,12 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrolled]);
 
+  // CAMBIO: Se eliminaron "Clientes" y "Blog" del array
   const navLinks = [
     { name: 'Inicio', path: '/' },
     { name: 'Tienda', path: '/tienda' }, 
     { name: 'Servicios', path: '/servicios' },
     { name: 'Proyectos', path: '/proyectos' },
-    { name: 'Clientes', path: '/clientes' },
-    { name: 'Blog', path: '/blog' },
   ];
 
   const textColorClass = isTransparent ? 'text-black' : 'text-slate-900';
@@ -85,8 +84,7 @@ const Header: React.FC = () => {
               </Link>
           </div>
 
-          {/* BOTÓN HAMBURGUESA (MÓVIL) - SIMPLIFICADO */}
-          {/* Ya no hace la animación de transformarse en X, solo abre el menú */}
+          {/* BOTÓN HAMBURGUESA (MÓVIL) */}
           <button
             className={`lg:hidden p-2 ${textColorClass} hover:bg-gray-100/50 rounded-full transition-colors z-50 relative flex items-center justify-center`}
             onClick={() => setMobileMenuOpen(true)}
@@ -98,19 +96,16 @@ const Header: React.FC = () => {
       </nav>
       
       {/* MENÚ MÓVIL (OFF-CANVAS) */}
-      {/* Overlay */}
       <div 
         className={`fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-500 lg:hidden ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
         onClick={() => setMobileMenuOpen(false)}
       ></div>
       
-      {/* Panel Deslizante */}
       <div 
         className={`fixed top-0 right-0 z-50 h-full w-[85%] max-w-[360px] bg-white shadow-2xl transform transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) lg:hidden flex flex-col ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         
-        {/* --- NUEVA X DE CIERRE --- */}
-        {/* Posicionada absolutamente en la esquina superior derecha del panel blanco */}
+        {/* BOTÓN CERRAR (X) */}
         <button 
           onClick={() => setMobileMenuOpen(false)}
           className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-all z-50"
@@ -118,7 +113,6 @@ const Header: React.FC = () => {
         >
           <X className="w-6 h-6" />
         </button>
-        {/* ------------------------- */}
 
         <div className="p-8 pt-24 flex-1 flex flex-col gap-6 overflow-y-auto">
           {navLinks.map((item, idx) => (

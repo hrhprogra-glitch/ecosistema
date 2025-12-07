@@ -514,98 +514,130 @@ const About = () => (
 );
 
 const Portfolio = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
-  };
+  // --- CONFIGURACIÓN DE ROTACIÓN AUTOMÁTICA ---
+  useEffect(() => {
+    if (isPaused) return;
 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
+    const rotationSpeed = 3000;
+
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current === projects.length - 1 ? 0 : current + 1));
+    }, rotationSpeed);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
+  // --- LÓGICA DE ESTILO 3D ---
+  const getCardStyle = (index: number) => {
+    const total = projects.length;
+    let offset = index - activeIndex;
+
+    if (offset < -Math.floor(total / 2)) offset += total;
+    if (offset > Math.floor(total / 2)) offset -= total;
+
+    const isActive = offset === 0;
+    const absOffset = Math.abs(offset);
+    
+    if (absOffset > 2) return { opacity: 0, pointerEvents: 'none' as const, display: 'none' };
+
+    const spacing = 40; 
+    const translateX = offset * spacing; 
+    const translateZ = isActive ? 100 : -150; 
+    const rotateY = isActive ? 0 : -45 * Math.sign(offset); 
+    const scale = isActive ? 1 : 0.8; 
+    const opacity = isActive ? 1 : 0.5; 
+    const zIndex = 100 - absOffset; 
+
+    return {
+      transform: `perspective(1000px) translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+      zIndex: zIndex,
+      opacity: opacity,
+      transition: 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)', 
+    };
   };
 
   return (
-    <section className="py-32 bg-slate-50 overflow-hidden relative">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section className="py-20 bg-slate-50 overflow-hidden relative border-t border-slate-200">
+      
+      {/* Fondo Decorativo */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-100 to-white pointer-events-none"></div>
+
+      <div className="max-w-[1400px] mx-auto px-4 relative z-10">
         
-        {/* Encabezado (Sin botones aquí) */}
         <Reveal>
-          <div className="mb-10 relative z-10 text-center md:text-left">
-            <h4 className="text-xs font-bold tracking-[0.2em] text-sky-600 mb-2 uppercase">Portafolio Global</h4>
-            <h2 className="text-4xl font-light text-slate-900 mb-4">
+          {/* CAMBIO: Reduje 'mb-16' a 'mb-6' para acercar el título a los proyectos */}
+          <div className="mb-6 text-center">
+            <h4 className="text-sky-600 font-bold tracking-[0.2em] text-sm uppercase mb-2">
+              Portafolio Global
+            </h4>
+            <h2 className="text-4xl md:text-6xl font-light text-slate-900">
               Proyectos <span className="font-semibold text-sky-500">Destacados</span>
             </h2>
-            <p className="text-slate-500 text-lg font-light max-w-2xl">
-              Infraestructura hídrica desplegada en los entornos más exigentes.
-            </p>
           </div>
         </Reveal>
 
-        {/* --- CONTENEDOR DEL CARRUSEL --- */}
-        <div className="relative h-[500px] w-full flex items-center justify-center perspective-1000 group/carousel">
-          
-          {/* BOTÓN ANTERIOR (Izquierda) */}
-          <button 
-            onClick={handlePrev}
-            className="absolute left-0 z-[200] p-4 rounded-full bg-white/80 backdrop-blur-md text-slate-800 hover:bg-sky-500 hover:text-white transition-all shadow-lg hover:shadow-sky-500/50 hover:scale-110 active:scale-95 -ml-4 md:ml-0"
-            aria-label="Anterior"
-          >
-            <ChevronLeft className="w-8 h-8" />
-          </button>
-
-          {/* BOTÓN SIGUIENTE (Derecha) */}
-          <button 
-            onClick={handleNext}
-            className="absolute right-0 z-[200] p-4 rounded-full bg-white/80 backdrop-blur-md text-slate-800 hover:bg-sky-500 hover:text-white transition-all shadow-lg hover:shadow-sky-500/50 hover:scale-110 active:scale-95 -mr-4 md:mr-0"
-            aria-label="Siguiente"
-          >
-            <ChevronRight className="w-8 h-8" />
-          </button>
-
-          {/* TARJETAS */}
+        {/* --- ESCENARIO 3D --- */}
+        <div 
+          className="relative h-[500px] md:h-[600px] w-full flex items-center justify-center perspective-container"
+          onMouseEnter={() => setIsPaused(true)} 
+          onMouseLeave={() => setIsPaused(false)} 
+        >
+          {/* RENDERING DE TARJETAS */}
           {projects.map((proj, index) => {
-            let position = index - activeIndex;
-            if (projects.length > 2) {
-               if (position < -Math.floor(projects.length / 2)) position += projects.length;
-               if (position > Math.floor(projects.length / 2)) position -= projects.length;
-            }
-
-            const isActive = position === 0;
-            const translateZ = isActive ? 0 : -400 * Math.abs(position); 
-            const rotateY = isActive ? 0 : -45 * Math.sign(position);
-            const translateX = position * 60; 
-            const opacity = isActive ? 1 : Math.max(0.2, 1 - Math.abs(position) * 0.4); 
-            const zIndex = 100 - Math.abs(position);
-            const scale = isActive ? 1 : 0.8;
+            const style = getCardStyle(index);
+            const isCenter = index === activeIndex;
 
             return (
               <div
                 key={index}
-                className="absolute w-[85%] md:w-[60%] lg:w-[40%] aspect-[4/3] transition-all duration-700 ease-out cursor-pointer"
-                style={{
-                  transform: `translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
-                  zIndex: zIndex,
-                  opacity: Math.abs(position) > 2 ? 0 : opacity, 
-                }}
+                className="absolute w-[85%] md:w-[60%] lg:w-[50%] aspect-video cursor-pointer"
+                style={style} 
                 onClick={() => setActiveIndex(index)}
               >
-                <div className={`relative h-full w-full rounded-3xl overflow-hidden shadow-2xl border transition-all duration-500 ${isActive ? 'border-sky-400/50 shadow-sky-500/20' : 'border-transparent'}`}>
-                  <img 
-                    src={proj.image} 
-                    alt={proj.title} 
-                    className="w-full h-full object-cover pointer-events-none" 
-                  />
-                  <div className={`absolute inset-0 bg-slate-900 transition-opacity duration-500 ${isActive ? 'opacity-20' : 'opacity-60 hover:opacity-40'}`}></div>
-                  <div className={`absolute bottom-0 left-0 right-0 p-8 transform transition-all duration-500 ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-80'}`}>
-                    <span className="inline-block px-3 py-1 mb-3 text-[10px] font-bold tracking-widest text-white uppercase bg-sky-500 rounded-full shadow-lg shadow-sky-500/30">
-                      {proj.category}
-                    </span>
-                    <h3 className="text-3xl font-bold text-white mb-2 shadow-black drop-shadow-md leading-tight">
-                      {proj.title}
-                    </h3>
-                    <div className="flex items-center gap-2 text-slate-300 font-medium">
-                      <Globe className="w-4 h-4 text-sky-400" />
-                      {proj.location}
+                {/* CONTENEDOR VISUAL INTERNO (Efectos Hover: Zoom y Glow) */}
+                <div className={`
+                  relative h-full w-full rounded-2xl overflow-hidden bg-white 
+                  border-[4px] border-white transition-all duration-300 ease-out
+                  hover:scale-105 hover:z-50
+                  hover:border-sky-400
+                  hover:shadow-[0_0_35px_rgba(14,165,233,0.7)]
+                  shadow-2xl
+                `}>
+                  
+                  {/* Imagen del Proyecto */}
+                  <div className="relative h-full w-full group">
+                    <img 
+                      src={proj.image} 
+                      alt={proj.title} 
+                      className="w-full h-full object-cover" 
+                    />
+                    
+                    {/* Overlay Gradiente */}
+                    <div className={`absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent transition-opacity duration-500 ${isCenter ? 'opacity-100' : 'opacity-60'}`}></div>
+
+                    {/* Contenido */}
+                    <div className={`
+                      absolute bottom-0 left-0 right-0 p-8 md:p-10 text-center 
+                      transition-all duration-700 transform 
+                      ${isCenter ? 'translate-y-0 opacity-100 delay-100' : 'translate-y-8 opacity-0'}
+                    `}>
+                      
+                      <span className="inline-block px-4 py-1.5 mb-4 text-[10px] font-bold tracking-widest text-white uppercase bg-sky-600 rounded-full shadow-lg border border-sky-400/30">
+                        {proj.category}
+                      </span>
+                      
+                      <h3 className="text-3xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg tracking-tight">
+                        {proj.title}
+                      </h3>
+                      
+                      <div className="flex items-center justify-center gap-2 text-sky-200 font-medium">
+                        <Globe className="w-4 h-4" /> {proj.location}
+                      </div>
+
+                      <div className="w-12 h-1 bg-sky-500 mx-auto mt-6 rounded-full"></div>
                     </div>
                   </div>
                 </div>
@@ -613,92 +645,105 @@ const Portfolio = () => {
             );
           })}
         </div>
+
+        {/* Paginación Inferior (Puntos) */}
+        <div className="flex justify-center gap-3 mt-10">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              className={`h-2 rounded-full transition-all duration-500 ${i === activeIndex ? 'w-12 bg-sky-600' : 'w-2 bg-slate-300 hover:bg-sky-400'}`}
+              aria-label={`Ir al proyecto ${i + 1}`}
+            />
+          ))}
+        </div>
+
       </div>
-      <style>{`
-        .perspective-1000 {
-          perspective: 1000px;
-          transform-style: preserve-3d;
-        }
-      `}</style>
     </section>
   );
 };
-
-// --- SECCIÓN DE MARCAS (PATROCINADORES - FLIP CARDS) ---
 
 const Brands = () => {
   const brands = [
     { 
       name: "Hunter", 
       logo: "/hunter.png", 
-      desc: "Líder mundial en innovación de riego residencial y comercial. Eficiencia y precisión en cada gota." 
+      desc: "Líder mundial en innovación de riego residencial y comercial." 
     },
     { 
       name: "DIG", 
       logo: "/dig.png", 
-      desc: "Pioneros en soluciones de micro-riego sostenibles alimentadas por energía alternativa." 
+      desc: "Soluciones de micro-riego sostenibles y energía alternativa." 
     },
     { 
       name: "Rain Pro", 
       logo: "/rainpro.png", 
-      desc: "Componentes de aspersión de grado profesional diseñados para el máximo rendimiento." 
+      desc: "Componentes de aspersión de grado profesional y alto rendimiento." 
     },
     { 
       name: "Wassermann", 
       logo: "/wassermann.png", 
-      desc: "Ingeniería alemana en sistemas de bombeo y presurización hídrica de alta confiabilidad." 
+      desc: "Ingeniería alemana en sistemas de bombeo y presurización." 
     },
     { 
       name: "Tuboplast", 
       logo: "/tuboplast.png", 
-      desc: "Infraestructura de conducción hidráulica robusta y certificada para la agroindustria." 
+      desc: "Infraestructura de conducción hidráulica certificada." 
     },
   ];
 
   return (
-    <section className="py-24 bg-slate-900 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10 pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '32px 32px' }}>
+    <section className="py-24 bg-slate-950 relative overflow-hidden border-t border-slate-800/50">
+      {/* Fondo decorativo sutil */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(56, 189, 248, 0.1) 1px, transparent 0)', backgroundSize: '30px 30px' }}>
       </div>
       
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         <Reveal>
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
-              Patrocinadores
-            </h2>
-            <p className="text-slate-400">Pasa el cursor sobre las tarjetas para conocer más.</p>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
+            <div className="max-w-2xl">
+              <h4 className="text-sky-500 font-bold tracking-[0.2em] text-xs uppercase mb-4">Tecnología Certificada</h4>
+              <h2 className="text-4xl md:text-5xl font-light text-white leading-tight">
+                Aliados de <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300">Clase Mundial</span>
+              </h2>
+            </div>
           </div>
         </Reveal>
 
-        <div className="flex flex-wrap justify-center gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-10">
           {brands.map((brand, idx) => (
-            <Reveal key={idx} delay={idx * 100}>
-              <div className="flip-card">
+            <Reveal key={idx} delay={idx * 100} className="h-full">
+              {/* La clase 'group' aquí activa los efectos hover en los hijos */}
+              <div className="flip-card w-full aspect-square group relative z-0 hover:z-10">
                 <div className="flip-card-inner">
                   
-                  {/* FRENTE: IMAGEN FULL */}
+                  {/* FRENTE: Logo maximizado */}
                   <div className="flip-card-front">
-                    <div className="h-full w-full bg-white flex items-center justify-center"> 
-                      <img 
-                        src={brand.logo} 
-                        alt={brand.name}
-                        className="w-full h-full object-contain p-4" 
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none'; // Si falla la imagen, se oculta
-                        }}
-                      />
-                    </div>
+                    {/* CAMBIO: Se eliminó el padding (p-6).
+                       La imagen usa w-[85%] h-[85%] para llenar el espacio de forma segura
+                       sin tocar los bordes redondeados. object-contain evita deformaciones.
+                    */}
+                    <img 
+                      src={brand.logo} 
+                      alt={brand.name}
+                      className="w-[85%] h-[85%] object-contain transition-transform duration-500 transform group-hover:scale-105" 
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
                   </div>
 
-                  {/* DORSO: DESCRIPCIÓN */}
-                  <div className="flip-card-back">
-                    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-                      <h4 className="text-sky-400 font-bold text-xl mb-3">{brand.name}</h4>
-                      <p className="text-slate-200 text-sm font-light leading-relaxed">
+                  {/* DORSO: Información */}
+                  <div className="flip-card-back p-6">
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                      <h4 className="text-sky-400 font-bold text-xl mb-4 tracking-wide">{brand.name}</h4>
+                      <p className="text-slate-300 text-sm font-light leading-relaxed mb-6">
                         {brand.desc}
                       </p>
-                      <div className="mt-4 w-12 h-1 bg-sky-500 rounded-full"></div>
+                      <Link to="/contacto" className="text-[11px] uppercase tracking-wider font-bold text-white bg-sky-600/20 border border-sky-500/30 px-5 py-2 rounded-full hover:bg-sky-500 hover:border-sky-500 transition-all duration-300">
+                        Saber más
+                      </Link>
                     </div>
                   </div>
 
@@ -711,8 +756,6 @@ const Brands = () => {
     </section>
   );
 };
-// ... (resto del archivo sin cambios)
-
 const CTA = () => (
   <section className="py-32 bg-sky-50 overflow-hidden relative">
     <Parallax speed={-0.6} className="absolute top-0 right-0 pointer-events-none"><div className="w-96 h-96 bg-sky-100 rounded-full blur-3xl opacity-50 -mr-20 -mt-20"></div></Parallax>
